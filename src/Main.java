@@ -30,7 +30,8 @@ public class Main {
 
         //Do something else
 
-        System.out.println("Difference between \"back\" and \"bac\" :"+dijkstra("back","bac"));
+        String w1="dissadvantag",w2="disadvantage";
+        System.out.println("Difference between \""+w1+"\" and \""+w2+"\" :"+dijkstra(w1,w2));
 
         //Print total time
         long endTime   = System.currentTimeMillis();
@@ -44,7 +45,6 @@ public class Main {
         int[][] graph=new int[og.length()+1][test.length()+1];
         graph[0][0]=0;
 
-
         for(int row=0;row<graph.length;row++)
             for (int col=0;col<graph[0].length;col++)
                 graph[row][col]=getVal(row,col,graph,og,test);
@@ -57,12 +57,10 @@ public class Main {
     private static int getVal(int row,int col,int[][]graph,String og,String test){
         if(row==0&&col==0)
             return 0;
-        if(row==0)
-            if(col!=0)
-                return graph[0][col-1]+1;
+        else if(row==0)
+            return graph[0][col-1]+1;
         else if(col==0)
-            if(row!=0)
-                return graph[row-1][0]+1;
+            return graph[row-1][0]+1;
         else{
             int val;
             if(og.charAt(row-1) == test.charAt(col-1))
@@ -70,8 +68,7 @@ public class Main {
             else
                 val=1;
 
-            return Math.min(graph[row-1][col-1],Math.max(graph[row-1][col],graph[row][col-1]))+val;
+            return Math.min(graph[row-1][col-1],Math.min(graph[row-1][col],graph[row][col-1]))+val;
             }
-        return -40000;
     }
 }
