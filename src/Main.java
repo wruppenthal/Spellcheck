@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 
 public class Main {
-    final static long startTime = System.currentTimeMillis();
+
     static String[] words;
 
 
@@ -37,7 +37,7 @@ public class Main {
         boolean go=true;
         while(go) {
             System.out.println("Please enter a word to be spellchecked.\nTo quit, enter 0.");
-            String word=scan.next();
+            String word=scan.next().toLowerCase();
             try {
                 if (Integer.parseInt(word) == 0) {
                     go = false;
@@ -48,6 +48,7 @@ public class Main {
 
             int dif=100;
             ArrayList<String> poss=new ArrayList<String>(); //List of possibles
+            final long startTime = System.currentTimeMillis();
             for(int c=0;c<words.length;c++){
                 int nd=101;
                 if(word!=null&&words[c]!=null)
@@ -62,20 +63,23 @@ public class Main {
             }
 
             System.out.println("Suggestion(s):");
+            long endTime   = System.currentTimeMillis();
+            long totalTime = endTime - startTime;
+            System.out.println("Time elapsed in millis: "+totalTime);
             for(String s:poss)
                 System.out.println(s);
+
         }
 
 
         //Print total time
-        long endTime   = System.currentTimeMillis();
-        long totalTime = endTime - startTime;
-        System.out.println("Time elapsed in millis: "+totalTime);
+
     }
 
     //Get the dijkstra distance between two strings
     private static int dijkstra(String og,String test){
         //Set up variables
+
         int[][] graph=new int[og.length()+1][test.length()+1];
         graph[0][0]=0;
 
