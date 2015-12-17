@@ -2,6 +2,7 @@
  * Created by WilliamRuppenthal on 12/4/15.
  */
 import java.io.*;
+import java.util.Arrays;
 
 
 public class Main {
@@ -30,8 +31,10 @@ public class Main {
 
         //Do something else
 
-        String w1="dissadvantag",w2="disadvantage";
+        String w1="backing",w2="back";
         System.out.println("Difference between \""+w1+"\" and \""+w2+"\" :"+dijkstra(w1,w2));
+
+
 
         //Print total time
         long endTime   = System.currentTimeMillis();
@@ -49,8 +52,8 @@ public class Main {
             for (int col=0;col<graph[0].length;col++)
                 graph[row][col]=getVal(row,col,graph,og,test);
 
-
-
+        for(int c=0;c<graph[0].length;c++)
+            System.out.println(Arrays.toString(graph[c]));
         return graph[og.length()][test.length()];
     }
 
