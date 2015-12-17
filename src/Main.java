@@ -4,11 +4,13 @@
 import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 
 public class Main {
     final static long startTime = System.currentTimeMillis();
     static String[] words;
+
 
 
     public static void main(String[] args) {
@@ -44,18 +46,24 @@ public class Main {
             }catch(NumberFormatException e){
             }
 
-            int dif=100,c=0;
-            String correct="";
-            while(dif>0){
-                int nd=dijkstra(word,words[c]);
+            int dif=100;
+            ArrayList<String> poss=new ArrayList<String>(); //List of possibles
+            for(int c=0;c<words.length;c++){
+                int nd=101;
+                if(word!=null&&words[c]!=null)
+                    nd=dijkstra(word,words[c]);
                 if(nd<dif) {
+                    poss.clear();
                     dif = nd;
-                    correct = words[c];
+                    poss.add(words[c]);
                 }
-                c++;
+                else if(nd==dif)
+                    poss.add(words[c]);
             }
 
-            System.out.println("Did you mean "+correct+"?");
+            System.out.println("Suggestion(s):");
+            for(String s:poss)
+                System.out.println(s);
         }
 
 
