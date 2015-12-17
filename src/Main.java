@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         final long startTime = System.currentTimeMillis();
         //Read words into dictionary array
-        String strLine;
+        String strLine="error";
         words = new String[109582];
         wrongs = new String[7];
         try {
@@ -24,15 +24,17 @@ public class Main {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             while ((strLine = br.readLine()) != null) {
-                for (int c=0;c<words.length;c++){
+                words[0]=strLine;
+                for (int c=1;c<words.length;c++){
                     words[c]=br.readLine();
                 }
             }
-
+            strLine="error";
             in=new FileInputStream("DankText.txt");
             br=new BufferedReader((new InputStreamReader(in)));
             while ((strLine = br.readLine()) != null) {
-                for (int c=0;c<wrongs.length;c++){
+                wrongs[0]=strLine;
+                for (int c=1;c<wrongs.length;c++){
                     wrongs[c]=br.readLine();
                 }
             }
