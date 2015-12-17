@@ -14,10 +14,11 @@ public class Main {
 
 
     public static void main(String[] args) {
+        final long startTime = System.currentTimeMillis();
         //Read words into dictionary array
         String strLine;
         words = new String[109582];
-        wrongs = new String[69];
+        wrongs = new String[7];
         try {
             FileInputStream in = new FileInputStream("wordsEn.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -28,7 +29,7 @@ public class Main {
                 }
             }
 
-            in=new FileInputStream("Dank list");
+            in=new FileInputStream("DankText.txt");
             br=new BufferedReader((new InputStreamReader(in)));
             while ((strLine = br.readLine()) != null) {
                 for (int c=0;c<wrongs.length;c++){
@@ -45,16 +46,16 @@ public class Main {
         Scanner scan=new Scanner(System.in);
 
         boolean go=true;
-        for(int c=0;c<wrongs.length;c++) {
-            System.out.println("Word to correct: "+wrongs[c]);
+        for(int i=0;i<wrongs.length;i++) {
+            System.out.println("Word to correct: "+wrongs[i]);
 
             int dif=100;
             ArrayList<String> poss=new ArrayList<String>(); //List of possibles
-            final long startTime = System.currentTimeMillis();
+
             for(int c=0;c<words.length;c++){
                 int nd=101;
-                if(wrongs[c]!=null&&words[c]!=null)
-                    nd=dijkstra(wrongs[c],words[c]);
+                if(wrongs[i]!=null&&words[c]!=null)
+                    nd=dijkstra(wrongs[i],words[c]);
                 if(nd<dif) {
                     poss.clear();
                     dif = nd;
@@ -65,13 +66,14 @@ public class Main {
             }
 
             System.out.println("Suggestion(s):");
-            long endTime   = System.currentTimeMillis();
-            long totalTime = endTime - startTime;
-            System.out.println("Time elapsed in millis: "+totalTime);
+
             for(String s:poss)
                 System.out.println(s);
 
         }
+        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("Time elapsed in millis: "+totalTime);
     }
 
     //Get the dijkstra distance between two strings
