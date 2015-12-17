@@ -10,13 +10,14 @@ import java.util.ArrayList;
 public class Main {
 
     static String[] words;
-
+    static String[] wrongs;
 
 
     public static void main(String[] args) {
         //Read words into dictionary array
         String strLine;
         words = new String[109582];
+        wrongs = new String[69];
         try {
             FileInputStream in = new FileInputStream("wordsEn.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -26,6 +27,15 @@ public class Main {
                     words[c]=br.readLine();
                 }
             }
+
+            in=new FileInputStream("Dank list");
+            br=new BufferedReader((new InputStreamReader(in)));
+            while ((strLine = br.readLine()) != null) {
+                for (int c=0;c<wrongs.length;c++){
+                    wrongs[c]=br.readLine();
+                }
+            }
+
             in.close();
         }catch(Exception e){
             System.out.println("Failed to read file");
@@ -35,24 +45,16 @@ public class Main {
         Scanner scan=new Scanner(System.in);
 
         boolean go=true;
-        while(go) {
-            System.out.println("Please enter a word to be spellchecked.\nTo quit, enter 0.");
-            String word=scan.next().toLowerCase();
-            try {
-                if (Integer.parseInt(word) == 0) {
-                    go = false;
-                    break;
-                }
-            }catch(NumberFormatException e){
-            }
+        for(int c=0;c<wrongs.length;c++) {
+            System.out.println("Word to correct: "+wrongs[c]);
 
             int dif=100;
             ArrayList<String> poss=new ArrayList<String>(); //List of possibles
             final long startTime = System.currentTimeMillis();
             for(int c=0;c<words.length;c++){
                 int nd=101;
-                if(word!=null&&words[c]!=null)
-                    nd=dijkstra(word,words[c]);
+                if(wrongs[c]!=null&&words[c]!=null)
+                    nd=dijkstra(wrongs[c],words[c]);
                 if(nd<dif) {
                     poss.clear();
                     dif = nd;
@@ -70,10 +72,6 @@ public class Main {
                 System.out.println(s);
 
         }
-
-
-        //Print total time
-
     }
 
     //Get the dijkstra distance between two strings
@@ -100,7 +98,10 @@ public class Main {
         else{
             int val;
             if(og.charAt(row-1) == test.charAt(col-1))
-                val=0;
+                if(row==1&&col==1)
+                    val=-1;
+                else
+                    val=0;
             else
                 val=1;
 
