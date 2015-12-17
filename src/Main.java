@@ -3,6 +3,7 @@
  */
 import java.io.*;
 import java.util.Arrays;
+import java.util.Scanner;
 
 
 public class Main {
@@ -29,11 +30,33 @@ public class Main {
             return;
         }
 
-        //Do something else
+        Scanner scan=new Scanner(System.in);
 
-        String w1="backing",w2="back";
-        System.out.println("Difference between \""+w1+"\" and \""+w2+"\" :"+dijkstra(w1,w2));
+        boolean go=true;
+        while(go) {
+            System.out.println("Please enter a word to be spellchecked.\nTo quit, enter 0.");
+            String word=scan.next();
+            try {
+                if (Integer.parseInt(word) == 0) {
+                    go = false;
+                    break;
+                }
+            }catch(NumberFormatException e){
+            }
 
+            int dif=100,c=0;
+            String correct="";
+            while(dif>0){
+                int nd=dijkstra(word,words[c]);
+                if(nd<dif) {
+                    dif = nd;
+                    correct = words[c];
+                }
+                c++;
+            }
+
+            System.out.println("Did you mean "+correct+"?");
+        }
 
 
         //Print total time
@@ -52,8 +75,6 @@ public class Main {
             for (int col=0;col<graph[0].length;col++)
                 graph[row][col]=getVal(row,col,graph,og,test);
 
-        for(int c=0;c<graph[0].length;c++)
-            System.out.println(Arrays.toString(graph[c]));
         return graph[og.length()][test.length()];
     }
 
