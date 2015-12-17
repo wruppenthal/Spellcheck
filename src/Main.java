@@ -10,15 +10,13 @@ import java.util.ArrayList;
 public class Main {
 
     static String[] words;
-    static String[] wrongs;
+    static ArrayList<String> wrongs=new ArrayList<String>();
 
 
     public static void main(String[] args) {
-        final long startTime = System.currentTimeMillis();
         //Read words into dictionary array
         String strLine="error";
         words = new String[109582];
-        wrongs = new String[7];
         try {
             FileInputStream in = new FileInputStream("wordsEn.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -33,10 +31,7 @@ public class Main {
             in=new FileInputStream("DankText.txt");
             br=new BufferedReader((new InputStreamReader(in)));
             while ((strLine = br.readLine()) != null) {
-                wrongs[0]=strLine;
-                for (int c=1;c<wrongs.length;c++){
-                    wrongs[c]=br.readLine();
-                }
+                wrongs.add(strLine);
             }
 
             in.close();
@@ -45,32 +40,34 @@ public class Main {
             return;
         }
 
+
+
+        //Start actual checking
+        final long startTime = System.currentTimeMillis();
         Scanner scan=new Scanner(System.in);
 
         boolean go=true;
-        for(int i=0;i<wrongs.length;i++) {
-            System.out.println("Word to correct: "+wrongs[i]);
+        for(int i=0;i<wrongs.size();i++) {
+            System.out.println("Word to correct: "+wrongs.get(i));
 
-            int dif=100;
-            ArrayList<String> poss=new ArrayList<String>(); //List of possibles
+            double dif=100;
+            String poss="";
 
             for(int c=0;c<words.length;c++){
-                int nd=101;
-                if(wrongs[i]!=null&&words[c]!=null)
-                    nd=dijkstra(wrongs[i],words[c]);
+                double nd=101;
+                if(wrongs.get(i)!=null&&words[c]!=null)
+                    nd=dijkstra(wrongs.get(i),words[c]);
+
                 if(nd<dif) {
-                    poss.clear();
+                    poss=words[c];
                     dif = nd;
-                    poss.add(words[c]);
                 }
-                else if(nd==dif)
-                    poss.add(words[c]);
+                if(dif==-5)
+                    break;
             }
 
-            System.out.println("Suggestion(s):");
-
-            for(String s:poss)
-                System.out.println(s);
+            System.out.println("Suggestion:");
+            System.out.println(poss);
 
         }
         long endTime   = System.currentTimeMillis();
@@ -79,20 +76,40 @@ public class Main {
     }
 
     //Get the dijkstra distance between two strings
-    private static int dijkstra(String og,String test){
+    private static double dijkstra(String og,String test){
         //Set up variables
+        if(og.equals(test))
+            return-5;
+        else if(Math.abs(og.length()-test.length())>2)
+            return 15;
 
-        int[][] graph=new int[og.length()+1][test.length()+1];
+
+        double[][] graph=new double[og.length()+1][test.length()+1];
         graph[0][0]=0;
 
         for(int row=0;row<graph.length;row++)
             for (int col=0;col<graph[0].length;col++)
                 graph[row][col]=getVal(row,col,graph,og,test);
 
+//        String newstr="";
+//        for(int c=0;c<og.length()-1;c++){
+//            for(int i=0;i<c;i++)
+//                newstr+=og.charAt(i);
+//            newstr+=og.charAt(c+1);
+//            newstr+=og.charAt(c);
+//            for(int i=c+2;i<og.length();i++)
+//                newstr+=og.charAt(i);
+//            if(newstr.equals(test))
+//                return 0.5;
+//            else
+//                newstr="";
+//        }
+
+
         return graph[og.length()][test.length()];
     }
 
-    private static int getVal(int row,int col,int[][]graph,String og,String test){
+    private static double getVal(int row,int col,double[][]graph,String og,String test){
         if(row==0&&col==0)
             return 0;
         else if(row==0)
@@ -100,7 +117,7 @@ public class Main {
         else if(col==0)
             return graph[row-1][0]+1;
         else{
-            int val;
+            double val;
             if(og.charAt(row-1) == test.charAt(col-1))
                 if(row==1&&col==1)
                     val=-1;
